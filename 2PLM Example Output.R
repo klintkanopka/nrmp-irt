@@ -243,3 +243,58 @@ worst_fit <- which(pfit$Zh==min(pfit$Zh))
 
 resps <- resp_mat[worst_fit,] %>% pivot_longer(names_to = 'word', values_to = 'resp', cols = names(resp_mat))
 compare_resps_pars <- left_join(resps, irt_params)
+
+## DIF: Drama and Erholung ####
+wide_gend <- dat %>%
+  filter(
+    item %in% c(
+      "Filmstar",
+      "Produkt",
+      "Versager",
+      "Tourist",
+      "Bereich",
+      "Drama",
+      "Erholung",
+      "Pflicht",
+      "Kunde",
+      "Ahorn",
+      "Scherz",
+      "Ampulle"
+    )
+  ) %>%
+  select(id, cov_sex, item, resp) %>%
+  pivot_wider(names_from = item, values_from = resp)
+
+mg2pl <- multipleGroup(
+  data = wide_gend[,3:14], 
+  group = wide_gend$cov_sex, 
+  model = 1, 
+  itemtype = "2PL", 
+  SE = TRUE, 
+  invariance = c('free_mean', 'free_var', 'intercepts', 'slopes')
+)
+
+coef(mg2pl)
+
+difres <- mirt::DIF(mg2pl, scheme = 'drop', which.par = c('d'))
+extract.mirt(difres, "DIF_coefficients")
+
+## plot for Drama as sole example ####
+difplotdat <- data.frame(
+  theta = tseq,
+  a = 1.580766,
+  Female = -0.1538278,
+  Male = -1.0318555
+) %>%
+  pivot_longer(
+    names_to = 'Sex', values_to = 'd', cols = c('Male', 'Female')
+  ) %>%
+  mutate(
+    p = plogis(a*theta + d)
+  )
+
+ggplot(difplotdat, aes(x = theta, y = p, group = Sex, color = Sex)) +
+  theme_minimal() + 
+  geom_line(linewidth = 0.75) +
+  see::scale_color_okabeito() +
+  labs(x = "θ", y = "Probability of Affirmative Response", title = "Male-Female DIF for Word \"Drama\"")
