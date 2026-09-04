@@ -245,6 +245,8 @@ resps <- resp_mat[worst_fit,] %>% pivot_longer(names_to = 'word', values_to = 'r
 compare_resps_pars <- left_join(resps, irt_params)
 
 ## DIF: Drama and Erholung ####
+tseq <- seq(-4, 4, length.out=1000)
+
 wide_gend <- dat %>%
   filter(
     item %in% c(
@@ -296,5 +298,5 @@ difplotdat <- data.frame(
 ggplot(difplotdat, aes(x = theta, y = p, group = Sex, color = Sex)) +
   theme_minimal() + 
   geom_line(linewidth = 0.75) +
-  see::scale_color_okabeito() +
+  scale_color_manual(values = c('green', 'purple4')) +
   labs(x = "θ", y = "Probability of Affirmative Response", title = "Male-Female DIF for Word \"Drama\"")
