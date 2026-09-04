@@ -103,11 +103,12 @@ plot_df <- rbind(
 plot_df$Stage <- factor(plot_df$Stage, levels = c("Before linking", "After linking"))
 
 ggplot(plot_df, aes(Theta, ExpectedScore, color = Form, linetype = Form)) +
-  geom_line(linewidth = 1) +
+  geom_line(linewidth = 1.5) +
   facet_wrap(~ Stage) +
   labs(
     title    = "Expected Total Score by Ability Level Before and After Linking",
     x = expression(theta), y = "Expected Total Score"
   ) +
   theme_minimal() +
-  see::scale_color_okabeito()
+  scale_color_manual(values = c("blue4", "orange4")) +
+  scale_linetype_manual(values = c(1, 8))
