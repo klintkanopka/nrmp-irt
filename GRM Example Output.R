@@ -6,6 +6,7 @@ library(tidyverse)
 library(mirt)
 library(irw)
 library(see)
+library(ggIRT)
 
 set.seed(20260901)
 
@@ -119,3 +120,20 @@ pars |>
   )
 
 plot(m_grm, type = 'trace')
+
+
+# Item plots
+
+gg_irccc(m_grm, theta = c(-5, 5), item = 4) +
+  scale_color_okabeito() +
+  labs(title = NULL, x = expression(theta), color = NULL, lty = NULL) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+ggsave(file.path(out_dir, "irt_grm_irccc.svg"), height = 8, width = 8)
+
+gg_iic(m_grm, item = 4, theta = c(-5, 5)) +
+  labs(x = expression(theta), title = NULL) +
+  theme_bw()
+
+ggsave(file.path(out_dir, "irt_grm_iic.svg"), height = 8, width = 8)
