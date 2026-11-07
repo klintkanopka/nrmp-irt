@@ -155,10 +155,20 @@ results |>
   group_by(iter, control) |>
   summarize(rmse = sqrt(mean(bias^2)), .groups = "drop") |>
   ggplot(aes(x = iter, y = rmse, color = control)) +
-  geom_line() +
-  geom_hline(aes(yintercept = 0.3), lty = 2) +
-  geom_vline(aes(xintercept = 14), lty = 2, color = okabeito_colors(2)) +
-  geom_vline(aes(xintercept = 46), lty = 2, color = okabeito_colors(1)) +
+  geom_line(linewidth = 1) +
+  geom_hline(aes(yintercept = 0.3), linewidth = 1, lty = 2) +
+  geom_vline(
+    aes(xintercept = 14),
+    linewidth = 1,
+    lty = 2,
+    color = okabeito_colors(2)
+  ) +
+  geom_vline(
+    aes(xintercept = 46),
+    linewidth = 1,
+    lty = 2,
+    color = okabeito_colors(1)
+  ) +
   labs(
     x = "Number of Items Delivered",
     y = "Vocabulary Measurement Precision",
@@ -169,7 +179,7 @@ results |>
   scale_y_continuous(limits = c(0, 0.8)) +
   theme(legend.position = "bottom")
 
-ggsave(file.path(out_dir, 'cat-1.png'), height = 6, width = 8)
+ggsave(file.path(out_dir, 'cat-5B.png'), height = 6, width = 8)
 
 
 results |>
@@ -328,151 +338,37 @@ theta_dist <- data.frame(
 
 ggplot() +
   xlim(-1.25, 2.25) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[1], sd = theta_dist$se[1]),
-    alpha = 0.4,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[2], sd = theta_dist$se[2]),
-    alpha = 0,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[3], sd = theta_dist$se[3]),
-    alpha = 0,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[4], sd = theta_dist$se[4]),
-    alpha = 0.6,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[5], sd = theta_dist$se[5]),
-    alpha = 0,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[6], sd = theta_dist$se[6]),
-    alpha = 0,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[7], sd = theta_dist$se[7]),
-    alpha = 0.8,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[8], sd = theta_dist$se[8]),
-    alpha = 0,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[9], sd = theta_dist$se[9]),
-    alpha = 0,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[10], sd = theta_dist$se[10]),
-    alpha = 1,
-    color = okabeito_colors(2)
-  ) +
-  geom_vline(
-    aes(xintercept = theta_dist$theta[11]),
-    lty = 2,
-    color = 'black'
-  ) +
-  labs(x = expression(theta), y = 'Estimate Density') +
-  theme_minimal()
-
-ggsave(file.path(out_dir, 'cat-2.png'), height = 6, width = 8)
-
-
-ggplot() +
-  xlim(-1.25, 2.25) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[1], sd = theta_dist$se[1]),
-    alpha = 0.4,
-    color = okabeito_colors(2)
-  ) +
-
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[4], sd = theta_dist$se[4]),
-    alpha = 0.6,
-    color = okabeito_colors(2)
-  ) +
-
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[7], sd = theta_dist$se[7]),
-    alpha = 0.8,
-    color = okabeito_colors(2)
-  ) +
-
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[10], sd = theta_dist$se[10]),
-    alpha = 1,
-    color = okabeito_colors(2)
-  ) +
-  stat_function(
-    fun = dnorm,
-    args = list(mean = theta_dist$theta[11], sd = theta_dist$se[11]),
-    alpha = 1,
-    color = "black"
-  ) +
-  geom_vline(
-    aes(xintercept = theta_dist$theta[11]),
-    lty = 2,
-    color = 'black'
-  ) +
-  labs(x = expression(theta), y = 'Estimate Density') +
-  theme_minimal()
-
-ggsave(file.path(out_dir, 'cat-3.png'), height = 6, width = 8)
-
-
-ggplot() +
-  xlim(-1.25, 2.25) +
   geom_function(
     fun = dnorm,
     aes(col = '5'),
     args = list(mean = theta_dist$theta[1], sd = theta_dist$se[1]),
-    lty = 3
+    lty = 3,
+    linewidth = 1
   ) +
   geom_function(
     fun = dnorm,
     aes(col = '8'),
     args = list(mean = theta_dist$theta[4], sd = theta_dist$se[4]),
     lty = 4,
+    linewidth = 1
   ) +
   geom_function(
     fun = dnorm,
     aes(col = '11'),
     args = list(mean = theta_dist$theta[7], sd = theta_dist$se[7]),
     lty = 2,
+    linewidth = 1
   ) +
   geom_function(
     fun = dnorm,
     aes(col = '14'),
+    linewidth = 1,
     args = list(mean = theta_dist$theta[10], sd = theta_dist$se[10]),
   ) +
   geom_vline(
     aes(xintercept = theta_dist$theta[11]),
     lty = 2,
+    linewidth = 1,
     color = 'black'
   ) +
   scale_color_manual(
@@ -492,4 +388,4 @@ ggplot() +
   theme_minimal() +
   theme(legend.position = "bottom")
 
-ggsave(file.path(out_dir, 'cat-4.png'), height = 6, width = 8)
+ggsave(file.path(out_dir, 'cat-5A.png'), height = 6, width = 8)
